@@ -1,29 +1,35 @@
 import scrapy
 from homelink.items import HomelinkItem
+import csv
 
 class HlSpider(scrapy.Spider):
+    base_url = "http://nj.lianjia.com/ershoufang/lc2f2y2"
+    url_suffix = "/"
+    init_url = base_url + url_suffix
+
     name = "hl"
     allowed_domains = ["nj.lianjia.com"]
     start_urls = [
-        "http://nj.lianjia.com/ershoufang/y2/"
+        init_url
     ]
 
     def parse(self, response):
-        links = []
+        page_count_unicode = response.xpath('//div[@class="page-box house-lst-page-box"]//@page-data').extract_first()
+        page_count = int(filter(str.isdigit, page_count_unicode[:18].encode('utf-8')))
 
+        for curr_page in range(1, page_count + 1):
+            print '\n'
+            print str(curr_page)
+            print '\n'
+            yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page) + self.url_suffix), self.parse_list_page)
+            print '\n'
+
+    def parse_list_page(self, response):
+        links = []
         for link in response.xpath('//div[@class="title"]/a/@href'):
             links.append(link.extract())
-
         for inner_page_url in links:
             yield scrapy.Request(response.urljoin(inner_page_url), self.parse_inner_page)
-
-
-        # filename = response.url.split("/")[-2] + '.html'
-        # f = open(filename, 'wb')
-        # for linker in links:
-        #     f.write(linker)
-        #     f.write('\n')
-
 
     def parse_inner_page(self, response):
         item = HomelinkItem()
