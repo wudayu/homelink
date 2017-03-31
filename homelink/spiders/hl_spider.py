@@ -3,7 +3,7 @@ from homelink.items import HomelinkItem
 import csv
 
 class HlSpider(scrapy.Spider):
-    base_url = "http://nj.lianjia.com/ershoufang/y3f2f5sf1l4l5/"
+    base_url = "http://nj.lianjia.com/ditiefang/li110460689/y3l1l2l3/"
     url_suffix = "/"
     init_url = base_url + url_suffix
 
@@ -20,7 +20,7 @@ class HlSpider(scrapy.Spider):
         page_count_unicode = response.xpath('//div[@class="page-box house-lst-page-box"]//@page-data').extract_first()
         page_count = int(filter(str.isdigit, page_count_unicode[:18].encode('utf-8')))
 
-        for curr_page in range(1, page_count + 1):
+        for curr_page in range(49, 54):
             print str(curr_page)
             yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page) + self.url_suffix), self.parse_list_page)
 
