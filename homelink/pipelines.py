@@ -5,42 +5,20 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-from scrapy import signals
-from scrapy.exporters import CsvItemExporter
-
-class HomelinkPipeline(object):
-    def process_item(self, item, spider):
-
-
-        self.writer.writerow([item['communityName'], item['url'], item['title'], item['houseType'], str(item['unitPrice']), str(item['totalPrice']), str(item['area']), item['floor'], item['heading'], item['decoration'], str(item['builtYear']), schoolNames, item['district'], item['token'], item['metro']])
-
-        return item
+import csv
 
 class CsvPipeline(object):
     def __init__(self):
-        self.files = {}
+        self.csvFile = file('csv_test.csv', 'wb')
+        self.csvWriter = csv.writer(self.csvFile, delimiter=',')
+        self.csvWriter.writerow(['小区', '网页', '标题', '户型', '单价', '总价', '面积', '楼层', '朝向', '装修', '建年', '学校', '区名', '标识', '地铁'])
 
-    @classmethod
-    def from_crawler(cls, crawler):
-        pipeline = cls()
-        crawler.signals.connect(pipeline.spider_opened, signals.spider_opened)
-        crawler.signals.connect(pipeline.spider_closed, signals.spider_closed)
-        return pipeline
+    def open_spider(self, spider):
+        return
 
-    def spider_opened(self, spider):
-        file = open('%s_items.csv' % spider.name, 'w+b')
-        self.files[spider] = file
-        self.exporter = CsvItemExporter(file)
-        self.exporter.fields_to_export = ['communityName', 'url', 'title', 'houseType', 'unitPrice', 'totalPrice', 'area', 'floor', 'heading', 'decoration', 'builtYear''district', 'token', 'metro']
-        # self.exporter.fields_to_export = ['communityName', 'url', 'title', 'houseType', 'unitPrice', 'totalPrice', 'area', 'floor', 'heading', 'decoration', 'builtYear''district', 'token', 'metro']
-
-        self.exporter.start_exporting()
-
-    def spider_closed(self, spider):
-        self.exporter.finish_exporting()
-        file = self.files.pop(spider)
-        file.close()
+    def close_spider(self, spider):
+        self.csvFile.close()
 
     def process_item(self, item, spider):
-        self.exporter.export_item(item)
+        self.csvWriter.writerow([item['communityName'], item['url'], item['title'], item['houseType'], str(item['unitPrice']), str(item['totalPrice']), str(item['area']), item['floor'], item['heading'], item['decoration'], str(item['builtYear']), item['schoolNames'], item['district'], item['token'], item['metro']])
         return item
