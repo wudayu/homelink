@@ -35,7 +35,7 @@ class HlSpider(scrapy.Spider):
 
     def parse_inner_page(self, response):
         item = HomelinkItem()
-        item['communityName'] = response.xpath('//div[@class="communityName"]/a[@class="info"]/text()').extract_first().encode('utf-8')
+        item['communityName'] = response.xpath('//div[@class="communityName"]/a[@class="info "]/text()').extract_first().encode('utf-8')
         item['url'] = response.url
         item['title'] = response.xpath('//h1[@class="main"]/text()').extract_first().encode('utf-8')
         item['houseType'] = response.xpath('//div[@class="room"]/div[@class="mainInfo"]/text()').extract_first().encode('utf-8')
