@@ -52,9 +52,11 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'homelink.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'homelink.middlewares.ProxyDownloaderMiddleware': 125,
+    'scrapy.downloadermiddlewares.downloadermiddleware.httpproxy.HttpProxyMiddleware':None,
+    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware':None
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -88,3 +90,9 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# IP proxy for testing
+IPPOOL=[
+	{"ipAddr":"171.92.52.201:9000"},
+	{"ipAddr":"117.90.3.207:9000"},
+]
