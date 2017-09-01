@@ -18,10 +18,8 @@ class HlSpider(scrapy.Spider):
 
         for curr_page in range(0, 100):
             print str(curr_page)
-            #yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
-            yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page + 1) + self.url_suffix), self.parse_list_page)
-
-        #csvfile.close()
+            #yield scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
+            yield scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + self.url_suffix), self.parse_list_page)
 
     def parse_list_page(self, response):
         links = []
