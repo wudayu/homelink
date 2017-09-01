@@ -2,7 +2,7 @@ import scrapy
 from homelink.items import HomelinkItem
 
 class HlSpider(scrapy.Spider):
-    base_url = "https://nj.lianjia.com/ershoufang/"
+    base_url = "https://nj.lianjia.com/ershoufang"
     url_suffix = "/"
     init_url = base_url + url_suffix
 
@@ -16,9 +16,10 @@ class HlSpider(scrapy.Spider):
         page_count_unicode = response.xpath('//div[@class="page-box house-lst-page-box"]//@page-data').extract_first()
         page_count = int(filter(str.isdigit, page_count_unicode[:18].encode('utf-8')))
 
-        for curr_page in range(0, 2):
+        for curr_page in range(0, 100):
             print str(curr_page)
-            yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
+            #yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
+            yield scrapy.Request(response.urljoin(self.base_url + "pg" + str(curr_page + 1) + self.url_suffix), self.parse_list_page)
 
         #csvfile.close()
 
