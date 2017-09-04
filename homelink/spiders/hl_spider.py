@@ -2,24 +2,43 @@ import scrapy
 from homelink.items import HomelinkItem
 
 class HlSpider(scrapy.Spider):
-    base_url = "https://nj.lianjia.com/ershoufang"
     url_suffix = "/"
-    init_url = base_url + url_suffix
 
     name = "hl"
     allowed_domains = ["nj.lianjia.com"]
     start_urls = [
-        init_url
+        "https://nj.lianjia.com/ershoufang/gulou/l1l2/",
+        "https://nj.lianjia.com/ershoufang/gulou/l3l4l5/",
+        "https://nj.lianjia.com/ershoufang/jianye//",
+        "https://nj.lianjia.com/ershoufang/qinhuai//",
+        "https://nj.lianjia.com/ershoufang/xuanwu//",
+        "https://nj.lianjia.com/ershoufang/yuhuatai//",
+        "https://nj.lianjia.com/ershoufang/qixia//",
+        "https://nj.lianjia.com/ershoufang/jiangning/l1l2/",
+        "https://nj.lianjia.com/ershoufang/jiangning/l3/",
+        "https://nj.lianjia.com/ershoufang/jiangning/l4l5/",
+        "https://nj.lianjia.com/ershoufang/pukou/l1l2/",
+        "https://nj.lianjia.com/ershoufang/pukou/l3l4l5/"
     ]
 
     def parse(self, response):
         page_count_unicode = response.xpath('//div[@class="page-box house-lst-page-box"]//@page-data').extract_first()
         page_count = int(filter(str.isdigit, page_count_unicode[:18].encode('utf-8')))
 
-        for curr_page in range(0, 100):
-            print str(curr_page)
-            # request = scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
-            request = scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + self.url_suffix), self.parse_list_page)
+        # respons.url eg.
+        # https://nj.lianjia.com/ershoufang/gulou/l3l4l5/ --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'gulou', 'l3l4l5', '']
+        # https://nj.lianjia.com/ershoufang/jiangning/l1l2/ --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jiangning', 'l1l2', '']
+        # https://nj.lianjia.com/ershoufang/qinhuai// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'qinhuai', '', '']
+        # https://nj.lianjia.com/ershoufang/jiangning/l3/ --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jiangning', 'l3', '']
+        # https://nj.lianjia.com/ershoufang/jianye// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jianye', '', '']
+
+        for curr_page in range(0, page_count):
+            # 拼接成合适的字符串
+            url_split = response.url.split("/")
+            init_url = "%s//%s/%s/%s/pg%d%s/" % (url_split[0], url_split[2], url_split[3], url_split[4], curr_page + 1, url_split[5])
+            print init_url
+            # 发起请求
+            request = scrapy.Request(response.urljoin(init_url), self.parse_list_page)
             request.meta['dont_redirect'] = True
             yield request
 
