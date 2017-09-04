@@ -66,6 +66,7 @@ ROBOTSTXT_OBEY = False
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'homelink.pipelines.CsvPipeline': 300,
+    # 'homelink.pipelines.MySqlPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -88,3 +89,9 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# MySQL Settings
+MYSQL_HOST = '139.224.232.157'
+MYSQL_DBNAME = 'db_fcsp'
+MYSQL_USER = 'root'
+MYSQL_PASSWORD = ''
