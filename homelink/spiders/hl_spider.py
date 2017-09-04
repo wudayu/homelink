@@ -16,16 +16,21 @@ class HlSpider(scrapy.Spider):
         page_count_unicode = response.xpath('//div[@class="page-box house-lst-page-box"]//@page-data').extract_first()
         page_count = int(filter(str.isdigit, page_count_unicode[:18].encode('utf-8')))
 
-        for curr_page in range(0, 2):
+        for curr_page in range(0, 100):
             print str(curr_page)
-            yield scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
+            # request = scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + "rs%e6%96%87%e5%8c%96%e5%90%8d%e5%9b%ad" + self.url_suffix), self.parse_list_page)
+            request = scrapy.Request(response.urljoin(self.init_url + "pg" + str(curr_page + 1) + self.url_suffix), self.parse_list_page)
+            request.meta['dont_redirect'] = True
+            yield request
 
     def parse_list_page(self, response):
         links = []
         for link in response.xpath('//div[@class="title"]/a/@href'):
             links.append(link.extract())
         for inner_page_url in links:
-            yield scrapy.Request(response.urljoin(inner_page_url), self.parse_inner_page)
+            request = scrapy.Request(response.urljoin(inner_page_url), self.parse_inner_page)
+            request.meta['dont_redirect'] = True
+            yield request
 
     def parse_inner_page(self, response):
         item = HomelinkItem()
