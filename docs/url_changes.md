@@ -13,9 +13,20 @@
 浦口1428 : https://nj.lianjia.com/ershoufang/pukou/l1l2/ —> https://nj.lianjia.com/ershoufang/pukou/pg2l1l2/  
 浦口1975 : https://nj.lianjia.com/ershoufang/pukou/l3l4l5/ —> https://nj.lianjia.com/ershoufang/pukou/pg2l3l4l5/  
 
-    # respons.url eg.
-    # https://nj.lianjia.com/ershoufang/gulou/l3l4l5/ --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'gulou', 'l3l4l5', '']
-    # https://nj.lianjia.com/ershoufang/jiangning/l1l2/ --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jiangning', 'l1l2', '']
-    # https://nj.lianjia.com/ershoufang/qinhuai// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'qinhuai', '', '']
-    # https://nj.lianjia.com/ershoufang/jiangning/l3/ --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jiangning', 'l3', '']
-    # https://nj.lianjia.com/ershoufang/jianye// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jianye', '', '']
+
+respons.url eg.  
+  
+https://nj.lianjia.com/ershoufang/gulou/l3l4l5/  
+--> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'gulou', 'l3l4l5', '']  
+
+https://nj.lianjia.com/ershoufang/jiangning/l1l2/  
+--> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jiangning', 'l1l2', '']  
+
+https://nj.lianjia.com/ershoufang/qinhuai//  
+--> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'qinhuai', '', '']  
+
+https://nj.lianjia.com/ershoufang/jiangning/l3/  
+--> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jiangning', 'l3', '']    
+
+https://nj.lianjia.com/ershoufang/jianye//  
+--> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jianye', '', '']
