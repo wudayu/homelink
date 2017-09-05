@@ -55,7 +55,7 @@ class HlSpider(scrapy.Spider):
         # Put 302 status code back to url request list, warning, this could raise infinite circle.
         # To use this, we need the server got some ways to change its ip address dynamically.
         if response.status == 302:
-            request = scrapy.Request(response.urljoin(response.url), self.parse, dont_filter=True)
+            request = scrapy.Request(response.urljoin(response.url), self.parse_inner_page, dont_filter=True)
             request.meta['dont_redirect'] = True
             yield request
 
