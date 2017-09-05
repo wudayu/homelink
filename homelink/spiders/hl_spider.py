@@ -4,6 +4,7 @@ from homelink.items import HomelinkItem
 class HlSpider(scrapy.Spider):
     url_suffix = "/"
 
+    handle_httpstatus_list = [302]
     name = "hl"
     allowed_domains = ["nj.lianjia.com"]
     start_urls = [
@@ -33,11 +34,10 @@ class HlSpider(scrapy.Spider):
         # https://nj.lianjia.com/ershoufang/jianye// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jianye', '', '']
 
         for curr_page in range(0, page_count):
-            # 拼接成合适的字符串
             url_split = response.url.split("/")
             init_url = "%s//%s/%s/%s/pg%d%s/" % (url_split[0], url_split[2], url_split[3], url_split[4], curr_page + 1, url_split[5])
             print init_url
-            # 发起请求
+
             request = scrapy.Request(response.urljoin(init_url), self.parse_list_page)
             request.meta['dont_redirect'] = True
             yield request
@@ -52,6 +52,13 @@ class HlSpider(scrapy.Spider):
             yield request
 
     def parse_inner_page(self, response):
+        # Put 302 status code back to url request list, warning, this could raise infinite circle.
+        # To use this, we need the server got some ways to change its ip address dynamically.
+        if response.status == 302:
+            request = scrapy.Request(response.urljoin(response.url), self.parse, dont_filter=True)
+            request.meta['dont_redirect'] = True
+            yield request
+
         item = HomelinkItem()
         item['communityName'] = response.xpath('//div[@class="communityName"]/a[@class="info "]/text()').extract_first().encode('utf-8')
         item['url'] = response.url
