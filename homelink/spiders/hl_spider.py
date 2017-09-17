@@ -21,6 +21,16 @@ class HlSpider(scrapy.Spider):
         "https://nj.lianjia.com/ershoufang/pukou/l3l4l5/"
     ]
 
+    headers = {
+		"Accept": "*/*",
+		"Accept-Encoding": "gzip,deflate",
+		"Accept-Language": "en-US,en;q=0.8,zh-TW;q=0.6,zh;q=0.4",
+		"Connection": "keep-alive",
+		"Content-Type":" application/x-www-form-urlencoded; charset=UTF-8",
+		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36",
+		"Referer": "http://www.itjuzi.com/"
+		}
+
     def parse(self, response):
         page_count_unicode = response.xpath('//div[@class="page-box house-lst-page-box"]//@page-data').extract_first()
         page_count = int(filter(str.isdigit, page_count_unicode[:18].encode('utf-8')))
@@ -33,11 +43,11 @@ class HlSpider(scrapy.Spider):
         # https://nj.lianjia.com/ershoufang/jianye// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jianye', '', '']
 
         for curr_page in range(0, page_count):
-            # 拼接成合适的字符串
+            
             url_split = response.url.split("/")
             init_url = "%s//%s/%s/%s/pg%d%s/" % (url_split[0], url_split[2], url_split[3], url_split[4], curr_page + 1, url_split[5])
             print init_url
-            # 发起请求
+
             request = scrapy.Request(response.urljoin(init_url), self.parse_list_page)
             request.meta['dont_redirect'] = True
             yield request
