@@ -44,10 +44,6 @@ class HlSpider(scrapy.Spider):
         # https://nj.lianjia.com/ershoufang/jianye// --> ['https:', '', 'nj.lianjia.com', 'ershoufang', 'jianye', '', '']
 
         for curr_page in range(0, page_count):
-<<<<<<< HEAD
-            
-=======
->>>>>>> 21ba346b9b663cb15db185711d6e39b7f1346a07
             url_split = response.url.split("/")
             init_url = "%s//%s/%s/%s/pg%d%s/" % (url_split[0], url_split[2], url_split[3], url_split[4], curr_page + 1, url_split[5])
             print init_url
